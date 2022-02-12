@@ -6,16 +6,23 @@ use ink_lang as ink;
 #[ink::contract]
 mod redpacket {
     #[ink(storage)]
-    pub struct RedPacket {}
+    pub struct RedPacket {
+        value: bool,
+    }
 
     impl RedPacket {
-        #[ink(constructor, payable)]
-        pub fn new() -> Self {
-            Self {}
+        #[ink(constructor)]
+        pub fn new(init_value: bool) -> Self {
+            Self { value: init_value }
+        }
+
+        #[ink(constructor)]
+        pub fn default() -> Self {
+            Self::new(Default::default())
         }
 
         #[ink(message)]
-        pub fn get_red_packet(&mut self) {
+        pub fn redpacket(&mut self) {
             let value = 9;
             assert!(value <= self.env().balance(), "insufficient funds!");
             assert!(value <= 1, "insufficient funds!");
@@ -30,7 +37,7 @@ mod redpacket {
         }
 
         #[ink(message)]
-        pub fn get_balance(&mut self) -> Balance {
+        pub fn get(&self) -> Balance {
             return self.env().balance();
         }
     }
